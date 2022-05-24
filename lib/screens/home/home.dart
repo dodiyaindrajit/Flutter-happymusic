@@ -7,10 +7,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:happymusic/constants/colors.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final Function _miniPlayer;
+
+  const HomeScreen(this._miniPlayer, {Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -117,8 +120,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    print(imageController);
     return Container(
+      height: 100.h,
       color: ColorConstants.kBackGround,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -201,7 +204,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
             ),
           ),
-          ControlButtons(_player, imageController: imageController),
+          ControlButtons(
+            _player,
+            widget._miniPlayer,
+            imageController: imageController,
+          ),
           StreamBuilder<PositionData>(
             stream: _positionDataStream,
             builder: (context, snapshot) {
@@ -271,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ],
           ),
           SizedBox(
-            height: 240.0,
+            height: 230.0,
             child: StreamBuilder<SequenceState?>(
               stream: _player.sequenceStateStream,
               builder: (context, snapshot) {
@@ -329,8 +336,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 class ControlButtons extends StatelessWidget {
   final AudioPlayer player;
   final CarouselController imageController;
+  final Function miniPlayer;
 
-  const ControlButtons(this.player, {Key? key, required this.imageController}) : super(key: key);
+  const ControlButtons(this.player, this.miniPlayer, {Key? key, required this.imageController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -380,16 +389,22 @@ class ControlButtons extends StatelessWidget {
               );
             } else if (playing != true) {
               return IconButton(
-                icon: const Icon(Icons.play_arrow),
-                iconSize: 64.0,
-                onPressed: player.play,
-              );
+                  icon: const Icon(Icons.play_arrow),
+                  iconSize: 64.0,
+                  onPressed: () {
+                    print("play--->");
+                    player.play();
+                    // miniPlayerBloc.miniPlayerEventSink.add(true);
+                  });
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
-                icon: const Icon(Icons.pause),
-                iconSize: 64.0,
-                onPressed: player.pause,
-              );
+                  icon: const Icon(Icons.pause),
+                  iconSize: 64.0,
+                  onPressed: () {
+                    print("Stop--->");
+                    player.pause();
+                    // miniPlayerBloc.miniPlayerEventSink.add(false);
+                  });
             } else {
               return IconButton(
                 icon: const Icon(Icons.replay),

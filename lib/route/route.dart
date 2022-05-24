@@ -17,7 +17,7 @@ class RouteController {
       case animateScreen:
         return pushNewScreen(
           context,
-          screen: AnimatedBottomBar(),
+          screen: MyApp(),
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         );
       default:

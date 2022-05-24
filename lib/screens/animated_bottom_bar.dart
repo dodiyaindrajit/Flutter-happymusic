@@ -6,79 +6,113 @@ import 'package:happymusic/screens/cart/cart.dart';
 import 'package:happymusic/screens/home/home.dart';
 import 'package:happymusic/screens/search/search.dart';
 import 'package:happymusic/screens/setting/setting.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class AnimatedBottomBar extends StatelessWidget {
-  final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
-
-  List<Icon> fontAwesomeIcons = [
-    const Icon(Icons.music_note),
-    const Icon(Icons.library_music),
-    const Icon(Icons.queue_music_sharp),
-    const Icon(Icons.music_video_rounded),
-  ];
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    List<Widget> _buildScreens() {
-      return [
-        const HomeScreen(),
-        const SearchScreen(),
-        const CartScreen(),
-        const SettingScreen(),
-      ];
-    }
+  _MyAppState createState() => _MyAppState();
+}
 
-    List<PersistentBottomNavBarItem> _navBarsItems() {
-      return [
-        for (var icon in fontAwesomeIcons)
-          PersistentBottomNavBarItem(
-            icon: icon,
-            activeColorPrimary: ColorConstants.kHighLightColor,
-            inactiveColorPrimary: Colors.white,
-          ),
-      ];
-    }
+class _MyAppState extends State<MyApp> {
+  final _audioPlayer = AudioPlayer();
+  List Tabs = [];
+  int currentTabIndex = 0;
+  bool isPlaying = false;
+  bool isShow = false;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: StyleConstants.navigationBarStyleGray,
-      sized: false,
-      child: ResponsiveSizer(builder: (context, orientation, screenType) {
-        return Scaffold(
-          backgroundColor: ColorConstants.kBackGround,
-          body: SafeArea(
-            child: PersistentTabView(
-              context,
-              controller: _controller,
-              screens: _buildScreens(),
-              items: _navBarsItems(),
-              confineInSafeArea: true,
-              // bottomScreenMargin: 10,
-              navBarHeight: 40,
-              // decoration: NavBarDecoration(
-              //   borderRadius: BorderRadius.circular(15.0),
-              // ),
-              popAllScreensOnTapOfSelectedTab: true,
-              popActionScreens: PopActionScreensType.all,
-              itemAnimationProperties: const ItemAnimationProperties(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.ease,
-              ),
-              screenTransitionAnimation: const ScreenTransitionAnimation(
-                animateTabTransition: true,
-                curve: Curves.ease,
-                duration: Duration(milliseconds: 500),
-              ),
-              navBarStyle: NavBarStyle.style6,
-              onItemSelected: (index) {},
-              backgroundColor: ColorConstants.kBackGround,
-              padding: NavBarPadding.only(top: 10),
-              bottomScreenMargin: 40,
+  Widget miniPlayer({required bool isShow}) {
+    print("$isShow --> Widget");
+    return !isShow
+        ? Container(
+            color: Colors.red,
+            height: 20,
+            width: 100.w,
+          )
+        : AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            color: Colors.blueGrey,
+            width: 100.w,
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.network(
+                    "https://www.designformusic.com/wp-content/uploads/2016/04/orion-trailer-music-album-cover-design.jpg",
+                    fit: BoxFit.cover),
+                Text(
+                  "music.name",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                IconButton(
+                    onPressed: () async {
+                      isPlaying = !isPlaying;
+                      if (isPlaying) {
+                        await _audioPlayer.play();
+                      } else {
+                        await _audioPlayer.pause();
+                      }
+                      setState(() {});
+                    },
+                    icon: isPlaying
+                        ? Icon(Icons.pause, color: Colors.white)
+                        : Icon(Icons.play_arrow, color: Colors.white))
+              ],
             ),
-          ),
-        );
-      }),
-    );
+          );
+  }
+
+  @override
+  initState() {
+    super.initState();
+    Tabs = [HomeScreen(miniPlayer), SearchScreen(), SearchScreen()];
+  }
+
+  // UI Design Code Goes inside Build
+  @override
+  Widget build(BuildContext context) {
+    print("Lets Build it");
+    return ResponsiveSizer(builder: (context, orientation, screenType) {
+      return Scaffold(
+        body: Tabs[currentTabIndex],
+        backgroundColor: Colors.black,
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 100.w,
+              alignment: Alignment.center,
+              color: Colors.white70,
+              child: Text(
+                "Counter Value is :",
+              ),
+            ),
+            BottomNavigationBar(
+              currentIndex: currentTabIndex,
+              onTap: (currentIndex) {
+                print("Current Index is $currentIndex");
+                currentTabIndex = currentIndex;
+                setState(() {}); // re-render
+              },
+              selectedLabelStyle: TextStyle(color: Colors.white),
+              selectedItemColor: Colors.white,
+              backgroundColor: Colors.black45,
+              items: [
+                BottomNavigationBarItem(icon: Icon(Icons.home, color: Colors.white), label: 'Home'),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search, color: Colors.white),
+                  label: 'Search',
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.library_books, color: Colors.white), label: 'Your Library')
+              ],
+            )
+          ],
+        ),
+      );
+    });
   }
 }
