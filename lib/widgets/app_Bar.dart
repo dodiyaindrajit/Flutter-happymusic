@@ -10,11 +10,11 @@ class CustomeAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: AppBar(
-        backgroundColor: ColorConstants.kBackGround,
+        backgroundColor: ColorConstants.kDarkBackGround,
         elevation: 0,
         title: const Text(
           'Happy Music',
-          style: TextStyle(color: ColorConstants.kHighLightColor),
+          style: TextStyle(color: ColorConstants.kDarkBackGround),
         ),
       ),
     );

@@ -20,7 +20,7 @@ class SplashScreen extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: StyleConstants.navigationBarStyleWhite,
       child: Container(
-        color: ColorConstants.kHighLightColor,
+        color: ColorConstants.kDarkBackGround,
         child: Center(
           child: Image.network(
               "https://lh3.googleusercontent.com/k5yRXhGXw3IqrbKwgIGN8oOjpMxSLW1Gsbw65H_ZdHRa0-bBFSqKxPQKO3LTdJy0LNY"),

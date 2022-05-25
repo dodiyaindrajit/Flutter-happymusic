@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:happymusic/constants/colors.dart';
 import 'package:happymusic/route/route.dart';
 
 void main() {
-  runApp(const HappyMusic());
+  runApp(const ProviderScope(child: HappyMusic()));
 }
 
 class HappyMusic extends StatelessWidget {
@@ -15,19 +16,23 @@ class HappyMusic extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(
-            accentColor: ColorConstants.kPrimaryColor,
+            accentColor: Colors.red,
             primarySwatch: ColorConstants.kHighLightColorMaterial,
           ),
-          primaryColor: ColorConstants.kPrimaryColor,
+          appBarTheme: const AppBarTheme(
+              color: ColorConstants.kDarkBackGround,
+              iconTheme: IconThemeData(color: ColorConstants.kLightFontColor)),
+          primaryColor: Colors.yellow,
           textTheme: const TextTheme(
-            headline6: TextStyle(color: ColorConstants.kHighLightColor),
-            bodyText1: TextStyle(color: ColorConstants.kHighLightColor),
+            headline4: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            headline5: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            headline6: TextStyle(fontSize: 16),
           ).apply(
-            bodyColor: ColorConstants.kHighLightColor,
-            displayColor: Colors.blue,
-          ),
-          iconTheme: const IconThemeData(color: ColorConstants.kHighLightColor)),
-      color: ColorConstants.kPrimaryColor,
+              bodyColor: ColorConstants.kLightFontColor,
+              displayColor: ColorConstants.kLightFontColor,
+              ),
+          iconTheme: const IconThemeData(color: ColorConstants.kLightFontColor)),
+      color: ColorConstants.kDarkBackGround,
       home: RouteController.initialScreen,
     );
   }

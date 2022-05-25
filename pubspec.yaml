@@ -19,6 +19,9 @@ dependencies:
   carousel_slider: ^4.1.1
 
   just_audio: ^0.9.21
+  audio_session: ^0.1.5
+  miniplayer: ^1.0.1
+  flutter_riverpod: ^1.0.4
 
 
 dev_dependencies:
