@@ -20,17 +20,3 @@ SplashScreen| HomeScren | ComingSoon
 <video src='https://user-images.githubusercontent.com/8991251/170666686-e8ddaac2-c26e-4ac4-a608-0f19e85dfafc.mov' /> | <video src='https://user-images.githubusercontent.com/8991251/170666680-0863257c-fa27-4bb0-ad00-60632f3e7f09.mov' /> | <video src='https://user-images.githubusercontent.com/8991251/170666637-97d83f8f-d399-4b84-90b0-3ccb0f2c1dec.mov' /> 
 
 
-
-<!-- 
-
-
-https://user-images.githubusercontent.com/8991251/170666637-97d83f8f-d399-4b84-90b0-3ccb0f2c1dec.mov
-
-
-
-https://user-images.githubusercontent.com/8991251/170666680-0863257c-fa27-4bb0-ad00-60632f3e7f09.mov
-
-
-
-https://user-images.githubusercontent.com/8991251/170666686-e8ddaac2-c26e-4ac4-a608-0f19e85dfafc.mov -->
-
