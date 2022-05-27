@@ -2,117 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:happymusic/constants/colors.dart';
 import 'package:happymusic/models/music.dart';
-import 'package:happymusic/screens/home/home.dart';
 import 'package:happymusic/screens/search/search.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:happymusic/screens/setup/animated_bottom_bar.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
-final selectedVideoProvider = StateProvider<Video?>((ref) => null);
-final miniPlayerControllerProvider = StateProvider.autoDispose<MiniplayerController>(
-  (ref) => MiniplayerController(),
-);
-
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final _audioPlayer = AudioPlayer();
-  List tabs = [];
-  int currentTabIndex = 0;
-  bool isPlaying = false;
-  bool isShow = false;
-
-  Widget miniPlayer({required bool isShow}) {
-    return !isShow
-        ? Container(
-            color: Colors.red,
-            height: 20,
-            width: 100.w,
-          )
-        : AnimatedContainer(
-            duration: const Duration(milliseconds: 500),
-            color: Colors.blueGrey,
-            width: 100.w,
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.network(
-                    "https://www.designformusic.com/wp-content/uploads/2016/04/orion-trailer-music-album-cover-design.jpg",
-                    fit: BoxFit.cover),
-                const Text(
-                  "music.name",
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
-                ),
-                IconButton(
-                    onPressed: () async {
-                      isPlaying = !isPlaying;
-                      if (isPlaying) {
-                        await _audioPlayer.play();
-                      } else {
-                        await _audioPlayer.pause();
-                      }
-                      setState(() {});
-                    },
-                    icon: isPlaying
-                        ? const Icon(Icons.pause, color: Colors.white)
-                        : const Icon(Icons.play_arrow, color: Colors.white))
-              ],
-            ),
-          );
-  }
-
-  @override
-  initState() {
-    super.initState();
-    tabs = [const HomeScreen(), const SearchScreen(), const SearchScreen()];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ResponsiveSizer(builder: (context, orientation, screenType) {
-      return Consumer(builder: (context, ref, _) {
-        final selectedVideo = ref.watch(selectedVideoProvider);
-        final miniPlayerController = ref.watch(miniPlayerControllerProvider);
-        return Scaffold(
-          body: tabs[currentTabIndex],
-          backgroundColor: ColorConstants.kDarkBackGround,
-          bottomNavigationBar: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              MiniPlayer(
-                  selectedVideo: selectedVideo,
-                  miniPlayerController: miniPlayerController,
-                  ref: ref),
-              BottomNavigationBar(
-                currentIndex: currentTabIndex,
-                elevation: 0,
-                onTap: (currentIndex) => setState(() {
-                  currentTabIndex = currentIndex;
-                }),
-                selectedLabelStyle: const TextStyle(color: Colors.white),
-                selectedItemColor: ColorConstants.kDarkFontColor,
-                backgroundColor: ColorConstants.kDarkBackGround,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                items: const [
-                  BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.library_books), label: "")
-                ],
-              )
-            ],
-          ),
-        );
-      });
-    });
-  }
-}
 
 class MiniPlayer extends StatelessWidget {
   const MiniPlayer({
@@ -126,7 +19,7 @@ class MiniPlayer extends StatelessWidget {
   final MiniplayerController miniPlayerController;
   final WidgetRef ref;
 
-  static double _playerMinHeight = 6.5.h;
+  static final double _playerMinHeight = 6.5.h;
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +27,12 @@ class MiniPlayer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey.withOpacity(0.5),
         borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          const BoxShadow(
-            color: Color(0xFF888484),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0xFFADD5EA),
             spreadRadius: 1,
-            blurRadius: 5,
-            offset: Offset(1, 2), // changes position of shadow
+            blurRadius: 4,
+            offset: Offset(1, 2),
           ),
         ],
       ),
@@ -201,7 +94,7 @@ class MiniPlayer extends StatelessWidget {
                               ),
                             ),
                             Flexible(
-                              child: Text(selectedVideo!.author.username,
+                              child: Text(selectedVideo!.artist,
                                   overflow: TextOverflow.ellipsis,
                                   style: Theme.of(context).textTheme.headline6),
                             ),

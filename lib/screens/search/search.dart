@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:happymusic/constants/colors.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:rxdart/rxdart.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -108,12 +109,13 @@ class _SearchScreenState extends State<SearchScreen> with WidgetsBindingObserver
     }
   }
 
-  // Stream<PositionData> get _positionDataStream => Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-  //         _player.positionStream,
-  //         _player.bufferedPositionStream,
-  //         _player.durationStream,
-  //         (position, bufferedPosition, duration) =>
-  //             PositionData(position, bufferedPosition, duration ?? Duration.zero));
+  Stream<PositionData> get _positionDataStream =>
+      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
+          _player.positionStream,
+          _player.bufferedPositionStream,
+          _player.durationStream,
+          (position, bufferedPosition, duration) =>
+              PositionData(position, bufferedPosition, duration ?? Duration.zero));
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +215,7 @@ class _SearchScreenState extends State<SearchScreen> with WidgetsBindingObserver
               imageController: imageController,
             ),
             StreamBuilder<PositionData>(
-              // stream: _positionDataStream,
+              stream: _positionDataStream,
               builder: (context, snapshot) {
                 final positionData = snapshot.data;
                 return SeekBar(
@@ -315,7 +317,7 @@ class _SearchScreenState extends State<SearchScreen> with WidgetsBindingObserver
                                 sequence[i].tag.title as String,
                                 style: i == state.currentIndex
                                     ? null
-                                    : Theme.of(context).textTheme.bodyText1,
+                                    : Theme.of(context).textTheme.headline5,
                               ),
                               onTap: () {
                                 _player.seek(Duration.zero, index: i);
@@ -428,8 +430,7 @@ class ControlButtons extends StatelessWidget {
           stream: player.speedStream,
           builder: (context, snapshot) => IconButton(
             icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, color: ColorConstants.kDarkBackGround)),
+                style: Theme.of(context).textTheme.headline6),
             onPressed: () {
               showSliderDialog(
                 context: context,
@@ -444,6 +445,18 @@ class ControlButtons extends StatelessWidget {
             },
           ),
         ),
+        // IconButton(
+        //   icon: const Icon(Icons.graphic_eq),
+        //   onPressed: () {
+        //     // Import package
+        //     // Open device equalizer
+        //     // Equalizer.open(player.androidAudioSessionId);
+        //
+        //     // // Set or remove audioSessionId.
+        //     // Equalizer.setAudioSessionId(audioSessionId);
+        //     // Equalizer.removeAudioSessionId(audioSessionId);
+        //   },
+        // ),
       ],
     );
   }

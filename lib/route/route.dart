@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:happymusic/screens/animated_bottom_bar.dart';
-import 'package:happymusic/screens/splash.dart';
+import 'package:happymusic/screens/setup/animated_bottom_bar.dart';
+import 'package:happymusic/screens/setup/splash.dart';
 
 // Define Routes
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';

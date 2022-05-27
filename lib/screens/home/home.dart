@@ -4,7 +4,7 @@ import 'package:happymusic/constants/colors.dart';
 import 'package:happymusic/models/music.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../animated_bottom_bar.dart';
+import '../setup/animated_bottom_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -52,6 +52,7 @@ class HomeScreen extends StatelessWidget {
               heightSpacer,
               titleText("Popular", "More", context),
               heightSpacer,
+              heightSpacer,
               SizedBox(
                 height: 150,
                 width: 100.w,
@@ -71,6 +72,7 @@ class HomeScreen extends StatelessWidget {
                     }),
               ),
               heightSpacer,
+              heightSpacer,
               titleText("Favorite", "", context),
               heightSpacer,
               ListView.builder(
@@ -78,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: 5,
                   itemBuilder: (BuildContext context, int index) {
-                    return const MusicListTile();
+                    return MusicListTile(video: videos[index]);
                   }),
               heightSpacer,
               titleText("Artist", "See All", context),
@@ -129,24 +131,36 @@ class HomeScreen extends StatelessWidget {
 class MusicListTile extends StatelessWidget {
   const MusicListTile({
     Key? key,
+    required this.video,
   }) : super(key: key);
+
+  final Video video;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: const Text("Tum Milo To DIl Khile"),
-      subtitle: const Text("By Arijit Singh"),
+      title: Text(
+        video.title,
+        style: Theme.of(context).textTheme.headline5,
+      ),
+      subtitle: Text(
+        video.artist,
+        style: Theme.of(context).textTheme.headline5,
+      ),
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Image.network(
-          "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/music-album-cover-design-template-1b27d21f12b3ce9dceaccc1e663da8a9_screen.jpg?ts=1561485221",
+          video.thumbnailUrl,
           fit: BoxFit.fill,
           width: 60,
           height: 60,
         ),
       ),
       trailing: IconButton(
-        icon: const Icon(Icons.more_horiz),
+        icon: const Icon(
+          Icons.more_horiz,
+          color: ColorConstants.kLightFontColor,
+        ),
         onPressed: () {},
       ),
     );
@@ -184,8 +198,9 @@ class AlbumImageTitle extends ConsumerWidget {
             ),
           ),
           titleSubtitleText(context, video!.title, Theme.of(context).textTheme.headline5!),
-          titleSubtitleText(
-              context, video!.author.username, Theme.of(context).textTheme.headline6!),
+          radius == 10
+              ? titleSubtitleText(context, video!.artist, Theme.of(context).textTheme.headline6!)
+              : const SizedBox(),
         ],
       ),
     );
@@ -204,5 +219,3 @@ class AlbumImageTitle extends ConsumerWidget {
     );
   }
 }
-
-
