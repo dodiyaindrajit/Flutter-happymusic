@@ -1,6 +1,6 @@
 # happymusic
 
-Music app Is Made with ❤ at **KarmaLeen Technology** in flutter.
+Music app Is Made with ❤ in **flutter.**
 
 
 
